@@ -12,11 +12,13 @@ end
 task :buckets => :connect do
 
   AWS::S3::Service.buckets.each do |bucket|
-    puts " / "
-    p bucket
+    puts " * " + bucket.inspect
   end
 end
 
+desc %{
+  uploads bucket.html in the given BUCKET
+}
 task :upload => :connect do
 
   raise ArgumentError.new("missing env var BUCKET") unless ENV['BUCKET']
@@ -30,3 +32,15 @@ task :upload => :connect do
   puts "bucket.html uploaded to '#{ENV['BUCKET']}'"
 end
 
+task :thousand => :connect do
+
+  raise ArgumentError.new("missing env var BUCKET") unless ENV['BUCKET']
+
+  1100.times do |i|
+
+    AWS::S3::S3Object.store(
+      "item_#{i}.txt", "nada #{i}", ENV['BUCKET'], :access => :public_read)
+
+    puts "item_#{i}.txt"
+  end
+end

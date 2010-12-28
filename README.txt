@@ -15,7 +15,7 @@ to upload bucket.html into the my-bucket. It's limited to US buckets. To place b
 
 == TODO
 
-[ ] over 1000 keys
+[o] over 1000 keys
 [ ] thumbnails ?
 
 

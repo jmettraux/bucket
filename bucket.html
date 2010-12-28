@@ -4,7 +4,7 @@
 <head>
 
 <title>
-  bucket
+  bucket.s3/
 </title>
 
 <style>
@@ -88,8 +88,16 @@ h1 {
 <script src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
 
 <script>
-  function listContent () {
-    $.get('..', function(data) {
+
+  function listContent (marker) {
+
+    var uri = '..';
+    if (marker) uri = uri + '?marker=' + marker;
+
+    $.get(uri, function(data) {
+
+      var last = null;
+
       $(data).find('Contents').each(function(index, elt) {
         var key = $(elt).find('Key').text();
         if (key === 'bucket.html') return;
@@ -97,11 +105,17 @@ h1 {
           '<li>' +
           '<a href="' + key + '">' + key + '</a>' +
           '</li>')
+        last = key;
       });
+
+      if ($(data).find('IsTruncated').text() === 'true') listContent(last);
     });
   }
+
   function loaded () {
+
     $('h1').text(window.location.href);
+
     listContent();
   }
 </script>
@@ -109,10 +123,11 @@ h1 {
 </head>
 
 <body onload="loaded()">
+
   <h1>bucket</h1>
+
   <ul>
   </ul>
 </body>
-
 </html>
 
